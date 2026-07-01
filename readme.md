@@ -1,62 +1,14 @@
-# 🤖 PROJET TECHCORP - Challenge IA 7h 🤖
 
-## 📋 BRIEFING DE MISSION
 
-**Contexte :** Vous êtes la nouvelle équipe technique de TechCorp Industries. L'équipe précédente a été licenciée suite à des soupçons de compromission du code et des données. Vous devez reprendre leur travail, valider l'intégrité du projet et finaliser le déploiement.
+**INFRA** : Haunui T. \
 
-## 🎯 OBJECTIFS PRINCIPAUX
 
-### 🚀 **Mission Critique - Production Ready**
-**Déployer le modèle Phi-3.5-Financial avec une interface chat :**
-- Serveur d'inférence opérationnel avec Phi-3.5-Financial — **au choix de votre équipe** :
-  - **Ollama** (solution clé en main recommandée)
-  - **Triton Inference Server** (solution avancée, configuration fournie)
-  - **Serveur maison** (FastAPI, Flask, vLLM… tout ce qui expose une API)
-- **Interface web obligatoire** pour interagir avec le modèle en temps réel, quelle que soit la solution choisie
-- Documentation technique de votre déploiement
+# 🏗️ INFRA — Serveur d'inférence Phi-3.5-Financial
 
-### 🔬 **Mission Expérimentale - R&D**
-**Fine-tuner un modèle médical expérimental (pas pour production) :**
-- Fine-tuning LoRA d'un modèle de base avec dataset médical fourni
-- Tests et validation des performances conversationnelles
-- *Note : Ce modèle reste expérimental, pas besoin de le déployer en production*
+#### URL actuelle : https://arising-oecd-impression-discover.trycloudflare.com
 
-## 📦 CE QUE VOUS AVEZ À DISPOSITION
-
-### 🏗️ Infrastructure Technique
-- **Ollama** — serveur d'inférence local, solution la plus simple ([ollama.com/download](https://ollama.com/download))
-- **Triton Inference Server** — déploiement avancé, configuration fournie dans `tritton_server/`
-- **Serveur maison** — vous pouvez monter votre propre API (FastAPI, vLLM, llama.cpp…)
-- **Modèle Phi-3.5-Financial** (Entraîné pour la finance/business, prêt à l'emploi voir dans `models/phi3_financial/`)
-- **Dataset médical** pour fine-tuning expérimental
-- **Accès Google Colab Pro** pour le fine-tuning et les tests
-- **Interface web** : obligatoire dans tous les cas pour interagir avec le modèle
-
-### 📁 Fichiers Hérités de l'Équipe Précédente
-- Code d'entraînement et de fine-tuning LoRA pour le modèle financier
-- Modèle Phi-3.5-Financial pré-entraîné
-- Code pour un chatbot de base
-- Quelques configurations de serveurs d'inférence (Ollama, Triton, etc.)
-- Dataset de conversations médicales (format JSON)
-- Documentation technique partielle
-- *Quelques fichiers de logs et notes personnelles laissés sur les machines*
-
-### 💡 **Pistes Techniques Suggérées**
-- **Quantization** : Envisagez des modèles quantisés (4-bit/8-bit) pour optimiser les performances
-- **Backend Python** : Triton supporte un backend Python plus simple que TensorRT
-- **Modèles légers** : Une liste de modèles alternatifs légers est disponible en annexe
-
----
-
-## 👥 RÉPARTITION DES RÔLES PAR FILIÈRE
-
-### 🏗️ **INFRA** - L'Architecte du Système
-
-**Votre Mission :**
-- Choisir et déployer un serveur d'inférence avec le modèle Phi-3.5-Financial :
-  - **Ollama** 
-  - **Triton Inference Server** 
-  - **Serveur maison**
+**Mission :**
+- Choisir et déployer un serveur d'inférence avec le modèle Phi-3.5-Financial (serveur maison)
 - Rendre le serveur accessible à l'équipe DEV WEB (URL + port)
 - Optimiser les performances (paramètres d'inférence, quantization)
 
@@ -66,113 +18,164 @@
 
 ---
 
-### 🤖 **IA** - Le Spécialiste Modèles
+# Serveur d'inférence opérationnel
 
-**Mission Production :**
-- Validation et tests du modèle Phi-3.5-Financial
-- Optimisation des paramètres d'inférence
+## Infrastructure
 
-**Mission Expérimentale :**
-- Fine-tuning LoRA d'un modèle médical avec le dataset fourni
-- Tests de performance du modèle expérimental
+- VM Debian 12 (Proxmox, home lab)
+- 4 vCPU / 8 Go RAM / 40 Go disque
+- IP : `192.168.4.108`
 
-**Livrables :**
-- Modèle Phi-3.5-Financial validé et optimisé
-- Modèle médical expérimental fine-tuné (LoRA)
+## Modèle déployé
 
----
+- **Nom du modèle** : `phi3.5-financial`
+- **Base** : `microsoft/Phi-3.5-mini-instruct`
+- **Quantization** : GGUF Q4_K_M (~2.2 Go)
+- **Prompt système** intégré (Modelfile) : cadrage métier finance/business, réponse forcée en français
 
-### 📊 **DATA** - L'Expert Données
+### Modelfile
 
-**Mission Production :**
-- Validation des données d'entrée pour Phi-3.5-Financial
-- Tests de qualité des conversations
+```dockerfile
+FROM phi3.5
 
-**Mission Expérimentale :**
-- Analyse et nettoyage du dataset médical
-- Préparation des données pour le fine-tuning LoRA
-- Validation de la qualité des conversations médicales
+SYSTEM """
+Tu es un assistant spécialisé en finance et business pour TechCorp Industries.
+Tu aides les utilisateurs avec : analyse financière, conseils business,
+explication de concepts économiques et comptables.
 
-**Livrables :**
-- Dataset médical préparé et nettoyé
-- Rapport de qualité des données
+Règles :
+- Reste factuel et précis, signale l'incertitude si besoin
+- Tu n'es pas un conseiller financier agréé : précise-le si on te demande une recommandation d'investissement
+- Hors-sujet (médical, juridique, autre) : redirige poliment vers un spécialiste
+- Réponds TOUJOURS en français, même si la question est posée dans une autre langue.
+"""
 
----
-
-### 🔒 **CYBER** - Le Responsable Sécurité
-
-**Mission Production :**
-- Audit de sécurité du déploiement (Ollama, Triton, ou serveur maison selon le choix de l'équipe INFRA)
-- Tests de robustesse du modèle Phi-3.5-Financial
-- Validation de l'intégrité des réponses
-
-**Mission Expérimentale :**
-- Tests de sécurité du modèle médical fine-tuné
-- Vérification de l'absence de biais problématiques
-
-**Livrables :**
-- Tests de robustesse validés
-
----
-
-### 🌐 **DEV WEB** - Le Développeur Interface
-
-**Mission Production :**
-- Développer une interface web de chat (obligatoire)
-- Intégrer l'API du serveur d'inférence choisi par l'équipe INFRA pour communiquer avec Phi-3.5-Financial
-  - Ollama : `http://localhost:11434`
-  - Triton : `http://localhost:8000`
-  - Serveur maison : URL communiquée par l'équipe INFRA
-- Interface utilisateur intuitive pour tester le modèle
-
-**Livrables :**
-- Interface web complète et fonctionnelle
-- Intégration API temps réel avec le serveur d'inférence de l'équipe
-
----
-
-
-## 🛠️ RESSOURCES TECHNIQUES FOURNIES
-
-### 📦 **Datasets**
-- **Dataset financier (v0 brut)** : [Dipl0/financial_dataset.json](https://huggingface.co/datasets/Dipl0/financial_dataset.json) — à télécharger manuellement dans `datasets/`
-- **Dataset médical** : [ruslanmv/ai-medical-chatbot](https://huggingface.co/datasets/ruslanmv/ai-medical-chatbot)
-
-### 📁 **Architecture du Projet**
-```
-techcorp-ai-chat/
-├── tritton_server/              # Configuration Triton Inference Server
-├── models/         # Modèle Phi-3.5-Financial
-├── medical_dataset/            # Dataset pour fine-tuning médical expérimental
-├── scripts/                    # Scripts d'entraînement et de tests
-
-
+PARAMETER temperature 0.3
+PARAMETER num_ctx 2048
 ```
 
-### 🧠 **Modèles IA Disponibles**
-1. **Phi-3.5-Financial** - Modèle spécialisé finance/business
+```bash
+ollama create phi3.5-financial -f Modelfile
+```
 
-### 💻 **Infrastructure**
-- **Ollama** : serveur d'inférence local, GPU ou CPU 
-- **Triton Inference Server** : déploiement avancé, configuration fournie
-- **Serveur maison** : FastAPI, vLLM, llama.cpp… tout ce qui expose une API REST
-- **Google Colab Pro** : GPU pour fine-tuning et tests
+## Accès pour l'équipe DEV WEB (réseau interne)
 
-### 🔧 **Pistes Techniques**
+```
+URL / Port : http://192.168.4.108:11434
+Endpoints  : /api/generate, /api/chat, /api/tags
+Doc API    : https://github.com/ollama/ollama/blob/main/docs/api.md
+```
 
-**Modèles Alternatifs si besoin :**
-- `phi3.5`, `qwen2.5:3b`, `mistral`, `tinyllama`
+## Accès WAN (Cloudflare Tunnel)
 
-## 📝 **DOCUMENTATION ET GUIDES**
-### 📚 **Ressource utile : [Déploiement rapide de modèles HuggingFace avec Triton Inference Server](https://github.com/triton-inference-server/tutorials/tree/main/Quick_Deploy/HuggingFaceTransformers)**
-### 📖 **Dataset Médical : [Dataset Hugging Face pour POC](https://huggingface.co/datasets/ruslanmv/ai-medical-chatbot)**
+**État actuel** : l'interface web (port 8080) est accessible depuis internet via un Quick Tunnel Cloudflare, **sans authentification** (retirée à la demande, précédemment protégée par basic auth).
+
+```
+Internet → Cloudflare edge → cloudflared (sortant uniquement)
+         → ollama-chat-hub 127.0.0.1:8080 (direct, sans auth)
+         → Ollama 127.0.0.1:11434 (toujours non exposé au tunnel)
+```
+
+
+
+**URL actuelle** : `https://arising-oecd-impression-discover.trycloudflare.com` 
+
+Cette URL change à chaque redémarrage du service (limite du Quick Tunnel gratuit, sans compte Cloudflare). Pour la retrouver :
+
+```bash
+sudo journalctl -u cloudflared-quicktunnel.service --no-pager | grep -o 'https://[a-zA-Z0-9.-]*trycloudflare\.com' | tail -1
+```
+
+**Services systemd :**
+- `cloudflared-quicktunnel.service` — `enabled` + `active`, pointe vers `localhost:8080`, tourne sous l'utilisateur non-privilégié `cloudflared`
+- `nginx.service` — arrêté et `disabled`, mais toujours installé avec la config basic auth (`/etc/nginx/.htpasswd`) prête à être réactivée si besoin
+
+**Réactiver l'authentification :** repointer le tunnel vers `127.0.0.1:8081` (nginx) au lieu de `127.0.0.1:8080`. Les identifiants existants restent valides — à récupérer auprès de la personne ayant fait la configuration initiale, ne pas les stocker en clair dans ce document.
+
+## Statut
+
+- [x] Ollama installé et opérationnel (service systemd, démarrage automatique)
+- [x] API exposée sur le réseau interne (`0.0.0.0:11434`)
+- [x] Modèle `phi3.5-financial` créé et testé
+- [x] Sizing VM validé après ajustement (4 vCPU / 8 Go RAM)
+- [x] Accès communiqué à l'équipe DEV WEB
+- [x] Interface accessible depuis le WAN via Cloudflare Tunnel
+
 ---
 
-## 🎯 MISSION FINALE
+# Documentation de déploiement (choix technique justifié)
 
-**Votre objectif principal : Rendre le modèle Phi-3.5-Financial accessible via une interface chat professionnelle — peu importe le serveur d'inférence choisi (Ollama, Triton, ou maison), l'interface est non négociable. Et n'oubliez pas d'expérimenter sur le fine tuning du modèle médical important aussi**
+## Choix technique : Ollama
 
+| Solution | Verdict |
+|---|---|
+| **Ollama** | Retenu |
+| Triton Inference Server | Écarté |
+| Serveur maison (FastAPI/Flask) | Écarté |
 
-**TechCorp compte sur vous pour finaliser ce projet. Explorez les fichiers laissés par l'équipe précédente, ils peuvent contenir des informations utiles !**
+### Justification
 
----
+L'environnement cible est une **VM Debian 12 sans GPU** (home lab), avec des ressources limitées (4 vCPU / 8 Go RAM). Ce contexte oriente fortement le choix :
+
+- **Triton Inference Server** est pensé pour des déploiements GPU à l'échelle. Sur du CPU-only avec 8 Go de RAM, sa configuration (backend Python, gestion de modèles multiples, pipeline complexe) apporte une charge et une complexité de maintenance disproportionnées pour servir un seul modèle.
+- **Un serveur maison** (FastAPI + transformers/vLLM) offrirait plus de contrôle, mais demande plus de développement, de gestion manuelle de la mémoire, et vLLM en particulier cible du GPU — pas adapté ici.
+- **Ollama** est conçu pour tourner efficacement en CPU-only, gère nativement la **quantization GGUF**, expose une API REST prête à l'emploi, et s'installe/maintient en une commande. C'est le meilleur rapport simplicité/performance pour ce contexte matériel.
+
+## Étapes de déploiement
+
+### 1. Installation d'Ollama
+
+```bash
+curl -fsSL https://ollama.com/install.sh | sh
+```
+
+### 2. Exposition réseau (accessible à l'équipe DEV WEB)
+
+Par défaut, Ollama n'écoute que sur `127.0.0.1`. Configuration pour le rendre accessible sur le réseau :
+
+```bash
+sudo mkdir -p /etc/systemd/system/ollama.service.d
+sudo tee /etc/systemd/system/ollama.service.d/override.conf <<EOF
+[Service]
+Environment="OLLAMA_HOST=0.0.0.0:11434"
+EOF
+sudo systemctl daemon-reload
+sudo systemctl restart ollama
+```
+
+Accès restreint au réseau interne (pas d'exposition directe sur internet, avant mise en place du tunnel) :
+
+```bash
+sudo ufw allow from 192.168.0.0/16 to any port 11434
+```
+
+### 3. Exposition WAN (Cloudflare Tunnel)
+
+```
+Internet → Cloudflare edge → cloudflared (connexion sortante uniquement)
+         → ollama-chat-hub 127.0.0.1:8080
+         → Ollama 127.0.0.1:11434 (jamais atteint par le tunnel)
+```
+
+Le tunnel Cloudflare évite toute ouverture de port sur la box/le pare-feu — `cloudflared` initie une connexion sortante vers Cloudflare, qui relaie ensuite le trafic entrant. Seul le port 8080 (interface web) est routé ; Ollama (11434) reste injoignable depuis l'extérieur par construction, même sans règle pare-feu dédiée.
+
+## Optimisation des performances
+
+| Paramètre | Valeur | Raison |
+|---|---|---|
+| Quantization | Q4_K_M | Meilleur compromis taille/qualité pour 8 Go RAM |
+| `num_ctx` | 2048 | Limite la consommation mémoire du contexte ; suffisant pour des échanges finance standards |
+| `temperature` | 0.3 | Réduit la variabilité, favorise des réponses factuelles et cohérentes (contexte financier) |
+| vCPU alloués | 4 | Passage de 1 à 4 vCPU après constat de saturation CPU (100% sur 1 seul cœur) |
+
+### Vérifications de charge
+
+```bash
+htop                        # surveillance CPU/RAM pendant l'inférence
+ollama list                 # modèles installés et leur taille
+sudo systemctl show ollama --property=Environment   # confirme la config réseau active
+```
+
+## Point de vigilance transmis aux autres équipes
+
+Le dossier `models/phi3_financial/` hérité de l'ancienne équipe contient un **adapter LoRA non mergé** avec la base `microsoft/Phi-3.5-mini-instruct`. Le modèle actuellement servi est donc Phi-3.5 vanille + prompt système, **pas** un modèle réellement fine-tuné finance. Le merge de l'adapter reste à valider et intégrer si le fine-tuning d'origine est jugé fiable après audit.
