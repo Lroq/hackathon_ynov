@@ -113,9 +113,9 @@ sudo journalctl -u cloudflared-quicktunnel.service --no-pager | grep -o 'https:/
 
 | Solution | Verdict |
 |---|---|
-| **Ollama** | ✅ Retenu |
-| Triton Inference Server | ❌ Écarté |
-| Serveur maison (FastAPI/Flask) | ❌ Écarté |
+| **Ollama** | Retenu |
+| Triton Inference Server | Écarté |
+| Serveur maison (FastAPI/Flask) | Écarté |
 
 ### Justification
 
