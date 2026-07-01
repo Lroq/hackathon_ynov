@@ -3,7 +3,7 @@
 #### URL actuelle : https://arising-oecd-impression-discover.trycloudflare.com
 
 **Mission :**
-- Choisir et déployer un serveur d'inférence avec le modèle Phi-3.5-Financial (Ollama / Triton / serveur maison)
+- Choisir et déployer un serveur d'inférence avec le modèle Phi-3.5-Financial (serveur maison)
 - Rendre le serveur accessible à l'équipe DEV WEB (URL + port)
 - Optimiser les performances (paramètres d'inférence, quantization)
 
