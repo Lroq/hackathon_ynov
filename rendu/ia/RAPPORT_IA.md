@@ -123,14 +123,15 @@ Fine-tuning **QLoRA 4-bit** de `microsoft/Phi-3.5-mini-instruct` sur
 Pipeline du notebook :
 1. Téléchargement du dataset médical
 2. **Nettoyage + scan anti-backdoor** (réutilise la logique de détection de la partie DATA)
-3. Formatage au format Phi-3 (`<|user|>` / `<|assistant|>`)
-4. Chargement 4-bit + LoRA (r=16, α=32) → `print_trainable_parameters()`
-5. Entraînement avec **métriques** (train/eval loss, steps)
+3. Préparation question/réponse (pour le masquage du prompt)
+4. Chargement 4-bit (attention **SDPA**) + LoRA (r=16, α=32) → `print_trainable_parameters()`
+5. Entraînement QLoRA — **masquage du prompt** (loss calculée sur la réponse uniquement),
+   `max_grad_norm=0.3`, `paged_adamw_8bit` — avec **métriques** (train/eval loss)
 6. Courbe de loss (matplotlib) + test qualitatif + sauvegarde de l'adaptateur
 
 **À faire sur Colab (GPU) puis compléter ici :**
 - 🔗 Lien Colab : _(à coller)_
-- 📉 Loss finale (train / eval) : _(cellule 8)_ · Epochs : 1 · Échantillons : 3 000 (POC)
+- 📉 Loss finale (train / eval) : _(cellule 8)_ · Epochs : 1 · Échantillons : 1 000 (POC)
 
 > ⚠️ Modèle **expérimental** — validation par des professionnels de santé obligatoire, pas de production.
 
