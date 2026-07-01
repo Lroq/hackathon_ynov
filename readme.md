@@ -1,3 +1,12 @@
+👥 RÉPARTITION DES RÔLES PAR FILIÈRE
+
+**INFRA** : Haunui T. \
+**DEV** : Louis R., Nathan R. \
+**DATA** : Nicolas G. \
+**CYBER** : Iliass B.
+
+
+
 # 🏗️ INFRA — Serveur d'inférence Phi-3.5-Financial
 
 #### URL actuelle : https://arising-oecd-impression-discover.trycloudflare.com
