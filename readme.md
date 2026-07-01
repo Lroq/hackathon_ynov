@@ -126,11 +126,14 @@
 - Interface utilisateur intuitive pour tester le modèle
 
 **Livrables :**
-- Interface web complète et fonctionnelle
-- Intégration API temps réel avec le serveur d'inférence de l'équipe
+- [x] Interface web complète et fonctionnelle (située dans le dossier [DevWeb](file:///Users/louisroques/Ynov/Ynov%20B3/hackathon_ynov/DevWeb))
+- [x] Intégration API temps réel avec le serveur d'inférence (Ollama)
+- [x] Documentation complète du module : [README de DevWeb](file:///Users/louisroques/Ynov/Ynov%20B3/hackathon_ynov/DevWeb/README.md)
+
+> [!IMPORTANT]
+> **Note de réalisation :** L'intégralité du module **DEV WEB** a été réalisée de manière 100% autonome par moi-même, sans aucune aide ni contribution de mes collaborateurs.
 
 ---
-
 
 ## 🛠️ RESSOURCES TECHNIQUES FOURNIES
 
