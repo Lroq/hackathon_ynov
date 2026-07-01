@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Ollama Chat Hub</title>
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500&family=Inter:wght@300;400;500;600;700&family=Outfit:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <!-- FontAwesome Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <!-- PrismJS (Syntax Highlighting) CSS -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css">
+  <!-- Custom CSS -->
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="app-container">
+    <!-- Sidebar -->
+    <aside class="sidebar">
+      <div class="sidebar-header">
+        <div class="logo">
+          <i class="fa-solid fa-brain"></i>
+          <span>Ollama Hub</span>
+        </div>
+      </div>
+
+      <div class="sidebar-content">
+        <!-- New Chat Button -->
+        <button id="new-chat-btn" class="action-btn primary-btn" title="Commencer une nouvelle conversation">
+          <i class="fa-solid fa-plus"></i> Nouveau Chat
+        </button>
+
+        <!-- Status Indicator Card -->
+        <div class="status-card">
+          <div class="status-label">État du Serveur</div>
+          <div id="connection-status" class="status-indicator offline">
+            <span class="status-dot"></span>
+            <span class="status-text">Déconnecté</span>
+          </div>
+          <div class="server-url">http://localhost:11434</div>
+        </div>
+
+        <!-- Model Selection Card -->
+        <div class="model-card">
+          <label for="model-select" class="control-label">Modèle Actif</label>
+          <div class="select-wrapper">
+            <select id="model-select" disabled>
+              <option value="">Aucun modèle disponible</option>
+            </select>
+            <i class="fa-solid fa-chevron-down select-arrow"></i>
+          </div>
+        </div>
+
+        <!-- Saved Chats Section -->
+        <div id="saved-chats-container" class="saved-chats-container">
+          <div class="control-label">Conversations Récentes</div>
+          <div id="saved-chats-list" class="saved-chats-list">
+            <div class="empty-history-text">Aucune discussion</div>
+          </div>
+        </div>
+
+        <!-- Actions -->
+        <div class="sidebar-actions">
+          <button id="clear-btn" class="action-btn secondary-btn" title="Vider l'historique de la conversation">
+            <i class="fa-regular fa-trash-can"></i> Effacer le chat
+          </button>
+        </div>
+      </div>
+    </aside>
+
+    <!-- Main Chat Content -->
+    <main class="chat-area">
+      <!-- Top navbar for mobile status display -->
+      <header class="chat-header">
+        <div class="header-model-info">
+          <span class="mobile-logo"><i class="fa-solid fa-brain"></i></span>
+          <span id="active-model-display">Sélectionnez un modèle</span>
+        </div>
+        <div class="header-actions">
+          <button id="mobile-clear-btn" class="icon-btn" title="Effacer le chat">
+            <i class="fa-regular fa-trash-can"></i>
+          </button>
+        </div>
+      </header>
+
+      <!-- Message History Container -->
+      <div id="chat-history" class="chat-history">
+        <!-- Welcome Screen (visible when chat is empty) -->
+        <div id="welcome-screen" class="welcome-screen">
+          <div class="welcome-icon">
+            <i class="fa-solid fa-comments"></i>
+          </div>
+          <h2>Bienvenue sur notre Chat</h2>
+          <p>Une interface moderne et rapide pour interagir avec nos IA locales.</p>
+          <div class="welcome-tips">
+            <div class="tip-card">
+              <i class="fa-solid fa-plug"></i>
+              <h3>Connexion automatique</h3>
+              <p>L'interface ping notre serveur local toutes les 5 secondes pour mettre à jour l'état de connexion.</p>
+            </div>
+            <div class="tip-card">
+              <i class="fa-solid fa-code"></i>
+              <h3>Rendu du Code</h3>
+              <p>Support complet du Markdown avec coloration syntaxique automatique pour vos blocs de code.</p>
+            </div>
+            <div class="tip-card">
+              <i class="fa-solid fa-database"></i>
+              <h3>Modèles multiples</h3>
+              <p>Sélectionnez instantanément n'importe quel modèle téléchargé sur votre instance Ollama.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Input Area -->
+      <footer class="chat-input-area">
+        <form id="chat-form" class="chat-form">
+          <div class="input-container">
+            <textarea 
+              id="message-input" 
+              placeholder="Envoyer un message à Ollama... (Entrée pour envoyer, Shift+Entrée pour sauter une ligne)"
+              rows="1"
+              required
+              disabled
+            ></textarea>
+            <button type="submit" id="send-btn" class="send-btn" disabled title="Envoyer le message">
+              <i class="fa-solid fa-paper-plane"></i>
+            </button>
+          </div>
+        </form>
+      </footer>
+    </main>
+  </div>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-javascript.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-python.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-css.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-markup.min.js"></script>
+  <script src="parser.js"></script>
+  <script src="ui.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
