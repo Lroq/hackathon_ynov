@@ -129,9 +129,11 @@ Pipeline du notebook :
    `max_grad_norm=0.3`, `paged_adamw_8bit` — avec **métriques** (train/eval loss)
 6. Courbe de loss (matplotlib) + test qualitatif + sauvegarde de l'adaptateur
 
-**À faire sur Colab (GPU) puis compléter ici :**
-- 🔗 Lien Colab : _(à coller)_
-- 📉 Loss finale (train / eval) : _(cellule 8)_ · Epochs : 1 · Échantillons : 1 000 (POC)
+**Résultats du fine-tuning (run sur GPU Colab T4) :**
+- 🔗 Lien Colab : https://colab.research.google.com/github/Lroq/hackathon_ynov/blob/groupe-ia-27/rendu/ia/medical_finetuning_colab.ipynb
+- 📉 **Loss finale — train : 2,22 · eval : 2,13** (vs ~8,0 avant masquage du prompt)
+- Epochs : 1 · Steps : 119 · Échantillons : 1 000 · Params entraînables : 25,2 M (**0,65 %**)
+- Le masquage du prompt (+ SDPA + `max_grad_norm`) a fait chuter la loss de ~8 à ~2,2.
 
 > ⚠️ Modèle **expérimental** — validation par des professionnels de santé obligatoire, pas de production.
 
