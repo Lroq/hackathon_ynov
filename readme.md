@@ -1,5 +1,7 @@
 # 🏗️ INFRA — Serveur d'inférence Phi-3.5-Financial
 
+#### URL actuelle : https://arising-oecd-impression-discover.trycloudflare.com
+
 **Mission :**
 - Choisir et déployer un serveur d'inférence avec le modèle Phi-3.5-Financial (Ollama / Triton / serveur maison)
 - Rendre le serveur accessible à l'équipe DEV WEB (URL + port)
